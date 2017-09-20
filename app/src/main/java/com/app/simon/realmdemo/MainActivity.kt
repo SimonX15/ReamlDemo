@@ -3,7 +3,6 @@ package com.app.simon.realmdemo
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
-import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -22,10 +21,13 @@ class MainActivity : AppCompatActivity() {
             val user1 = User()
             user1.id = 101
             user1.name = "赵云"
+            user1.age = 23
 
             val user2 = User()
             user2.id = 102
             user2.name = "张飞"
+            user2.age = 24
+
             RealmHelper.getRealm().executeTransactionAsync({
                 it.copyToRealmOrUpdate(user1)
                 it.copyToRealmOrUpdate(user2)
@@ -41,8 +43,7 @@ class MainActivity : AppCompatActivity() {
                 user1.id = 101
                 user1.name = "赵云"
             }*/
-
-            SecondActivity.launch(this@MainActivity)
+//            SecondActivity.launch(this@MainActivity)
         }
         btn_delete.setOnClickListener {
             RealmHelper.getRealm().executeTransaction {
@@ -76,7 +77,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun init() {
-        Realm.init(this)
+//        Realm.init(this)
 //        val realm = Realm.getDefaultInstance()
         /*val config = RealmConfiguration.Builder()
                 .name("my_realm.realm") //文件名

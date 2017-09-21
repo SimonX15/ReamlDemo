@@ -17,6 +17,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun assignViews() {
+        val realm = RealmHelper.getRealm()
         btn_add.setOnClickListener {
             val user1 = User()
             user1.id = 101
@@ -28,7 +29,7 @@ class MainActivity : AppCompatActivity() {
             user2.name = "张飞"
             user2.age = 24
 
-            RealmHelper.getRealm().executeTransactionAsync({
+            realm.executeTransactionAsync({
                 it.copyToRealmOrUpdate(user1)
                 it.copyToRealmOrUpdate(user2)
             }, {
@@ -36,7 +37,7 @@ class MainActivity : AppCompatActivity() {
                 Log.i(TAG, "add success")
             }, {
                 tv_result.text = "add error"
-                Log.i(TAG, "add error")
+                Log.e(TAG, "add error", it)
             })
             /*RealmHelper.getRealm().executeTransaction {
                 val user1 = it.createObject(User::class.java)
@@ -46,7 +47,7 @@ class MainActivity : AppCompatActivity() {
 //            SecondActivity.launch(this@MainActivity)
         }
         btn_delete.setOnClickListener {
-            RealmHelper.getRealm().executeTransaction {
+            realm.executeTransaction {
                 val results = it.where(User::class.java)
                         .equalTo("name", "张飞")
                         .findAll()
@@ -55,7 +56,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
         btn_update.setOnClickListener {
-            RealmHelper.getRealm().executeTransaction {
+            realm.executeTransaction {
                 val user = it.where(User::class.java)
                         .equalTo("name", "张飞")
                         .findFirst()
@@ -65,13 +66,16 @@ class MainActivity : AppCompatActivity() {
             }
         }
         btn_query.setOnClickListener {
-            RealmHelper.getRealm()
+            realm
                     .where(User::class.java)
 //                    .equalTo("name", "赵云")
                     .findAllAsync()
                     .addChangeListener {
                         tv_result.text = "query$it"
                         Log.i(TAG, "query it=" + it.toString())
+
+                        val list = realm.copyFromRealm(it)
+                        Log.i(TAG, "query list=" + list.toString())
                     }
         }
     }

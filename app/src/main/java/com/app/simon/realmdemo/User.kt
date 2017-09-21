@@ -1,5 +1,6 @@
 package com.app.simon.realmdemo
 
+import io.realm.RealmList
 import io.realm.RealmModel
 import io.realm.annotations.PrimaryKey
 import io.realm.annotations.RealmClass
@@ -23,9 +24,9 @@ open class User : RealmModel {
     @Required
     var name: String? = null
 
-    var age:Int = 0
+    var age: Int = 0
 
-//    var dog: Dog? = null
+    var dog: Dog? = null
 
-//    var catList: RealmList<Cat>? = null
+    var catList: RealmList<Cat>? = null
 }

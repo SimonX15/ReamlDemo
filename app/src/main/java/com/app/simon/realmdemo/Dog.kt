@@ -14,4 +14,8 @@ open class Dog : RealmModel {
 
     var name: String? = null
     var age: Int = 0
+
+    override fun toString(): String {
+        return "Dog(name=$name, age=$age)"
+    }
 }

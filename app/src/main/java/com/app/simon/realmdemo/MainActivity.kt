@@ -23,11 +23,20 @@ class MainActivity : AppCompatActivity() {
             user1.id = 101
             user1.name = "赵云"
             user1.age = 23
+            val dog = Dog()
+            dog.name = "小黑"
+            dog.age = 2
+//            user1.dog = dog
 
             val user2 = User()
             user2.id = 102
             user2.name = "张飞"
             user2.age = 24
+//            user2.catList = RealmList()
+//            val cat = Cat()
+//            cat.name = "喵喵"
+//            cat.age = 1
+//            user2.catList!!.add(cat)
 
             realm.executeTransactionAsync({
                 it.copyToRealmOrUpdate(user1)
@@ -35,9 +44,11 @@ class MainActivity : AppCompatActivity() {
             }, {
                 tv_result.text = "add success"
                 Log.i(TAG, "add success")
+                realm.close()
             }, {
                 tv_result.text = "add error"
                 Log.e(TAG, "add error", it)
+                realm.close()
             })
             /*RealmHelper.getRealm().executeTransaction {
                 val user1 = it.createObject(User::class.java)
@@ -54,6 +65,7 @@ class MainActivity : AppCompatActivity() {
                 results.deleteAllFromRealm()
                 tv_result.text = "delete success"
             }
+            realm.close()
         }
         btn_update.setOnClickListener {
             realm.executeTransaction {
@@ -64,6 +76,7 @@ class MainActivity : AppCompatActivity() {
 
                 tv_result.text = "update success"
             }
+            realm.close()
         }
         btn_query.setOnClickListener {
             realm
@@ -76,22 +89,17 @@ class MainActivity : AppCompatActivity() {
 
                         val list = realm.copyFromRealm(it)
                         Log.i(TAG, "query list=" + list.toString())
+                        realm.close()
                     }
         }
     }
 
     private fun init() {
-//        Realm.init(this)
-//        val realm = Realm.getDefaultInstance()
-        /*val config = RealmConfiguration.Builder()
-                .name("my_realm.realm") //文件名
-                .schemaVersion(0) //版本号
-                .build()*/
-//        RealmHelper.getRealm()
+
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        RealmHelper.getRealm().close()
+//        RealmHelper.getRealm().close()
     }
 }

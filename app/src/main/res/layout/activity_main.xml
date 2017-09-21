@@ -9,6 +9,12 @@
     tools:context="com.app.simon.realmdemo.MainActivity">
 
     <Button
+        android:id="@+id/btn_query"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="query"/>
+
+    <Button
         android:id="@+id/btn_add"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -25,12 +31,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="update"/>
-
-    <Button
-        android:id="@+id/btn_query"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="query"/>
 
     <TextView
         android:id="@+id/tv_result"

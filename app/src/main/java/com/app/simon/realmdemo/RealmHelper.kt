@@ -41,27 +41,25 @@ object RealmHelper {
                         }
                     }*/
                     .schemaVersion(2) //版本号升级
-                    .deleteRealmIfMigrationNeeded()
+//                    .deleteRealmIfMigrationNeeded()//删除原数据
                     .migration { realm, oldVersion, newVersion ->
                         Log.i(TAG, "oldVersion:$oldVersion;newVersion:$newVersion")
                         val schema = realm.schema
                         if (oldVersion == 0L) {
                             //dog
                             val dogSchema = schema.get("Dog")
-                            val catSchema = schema.get("Cat")
 
                             val userSchema = schema.get("User")
                             userSchema
                                     .addRealmObjectField("dog", dogSchema)
                                     .transform {
                                         if (it.getString("name") == "赵云") {
-                                            val dog: Dog = Dog()
-                                            dog.name = "啸天"
-                                            dog.age = 3
+                                            val dog = realm.createObject("Dog")
+                                            dog.setString("name", "啸天")
+                                            dog.setInt("age", 3)
                                             it.set("dog", dog)
                                         }
                                     }
-                                    .addRealmListField("catList", catSchema)
                         }
                         if (oldVersion == 1L) {
                             //cat
@@ -70,13 +68,19 @@ object RealmHelper {
                             val userSchema = schema.get("User")
                             userSchema
                                     .addRealmListField("catList", catSchema)
-                            /*.transform {
-                                it.getString("")
-                            }*/
+                                    .transform {
+                                        if (it.getString("name") == "张飞") {
+                                            val cat = realm.createObject("Cat")
+                                            cat.setString("name", "喵喵")
+                                            cat.setInt("age", 2)
+
+                                            it.getList("catList").add(cat)
+                                        }
+                                    }
                         }
                     }
                     .build()
-//            Realm.setDefaultConfiguration(configuration)
+            Realm.setDefaultConfiguration(configuration)
             realm = Realm.getInstance(configuration)
         }
         return realm!!

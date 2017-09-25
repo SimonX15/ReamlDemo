@@ -38,21 +38,30 @@ class MainActivity : AppCompatActivity() {
 //            cat.age = 1
 //            user2.catList!!.add(cat)
 
-            UserDBHelper.add(user1, object : OnDBCompleteListener {
-                override fun onResult(results: List<Any>?) {
 
-                }
+            val user3 = User()
+            user3.name = "李四"
+            user3.age = 30
 
-                override fun onSuccess() {
+            val user4 = User()
+            user4.name = "江姐"
+            user4.age = 30
 
-                }
-
-                override fun onError(throwable: Throwable) {
-
-                }
-
+            val realm = RealmHelper.getRealm()
+            realm.executeTransactionAsync({
+                it.copyToRealmOrUpdate(user1)
+                it.copyToRealmOrUpdate(user2)
+                it.copyToRealmOrUpdate(user3)
+                it.copyToRealmOrUpdate(user4)
+            }, {
+                tv_result.text = "add success"
+                Log.i(TAG, "add success")
+                realm.close()
+            }, {
+                tv_result.text = "add error"
+                Log.e(TAG, "add error", it)
+                realm.close()
             })
-
         }
         btn_delete.setOnClickListener {
             UserDBHelper.deleteByName("张飞", object : OnDBCompleteListener {

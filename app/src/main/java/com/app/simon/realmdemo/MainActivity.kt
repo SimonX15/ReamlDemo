@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun assignViews() {
-        val realm = RealmHelper.getRealm()
+//        val realm = RealmHelper.getRealm()
         btn_add.setOnClickListener {
             val user1 = User()
             user1.id = 101
@@ -38,36 +38,40 @@ class MainActivity : AppCompatActivity() {
 //            cat.age = 1
 //            user2.catList!!.add(cat)
 
-            realm.executeTransactionAsync({
-                it.copyToRealmOrUpdate(user1)
-                it.copyToRealmOrUpdate(user2)
-            }, {
-                tv_result.text = "add success"
-                Log.i(TAG, "add success")
-                realm.close()
-            }, {
-                tv_result.text = "add error"
-                Log.e(TAG, "add error", it)
-                realm.close()
+            UserDBHelper.add(user1, object : OnDBCompleteListener {
+                override fun onResult(results: List<Any>?) {
+
+                }
+
+                override fun onSuccess() {
+
+                }
+
+                override fun onError(throwable: Throwable) {
+
+                }
+
             })
-            /*RealmHelper.getRealm().executeTransaction {
-                val user1 = it.createObject(User::class.java)
-                user1.id = 101
-                user1.name = "赵云"
-            }*/
-//            SecondActivity.launch(this@MainActivity)
+
         }
         btn_delete.setOnClickListener {
-            realm.executeTransaction {
-                val results = it.where(User::class.java)
-                        .equalTo("name", "张飞")
-                        .findAll()
-                results.deleteAllFromRealm()
-                tv_result.text = "delete success"
-            }
-            realm.close()
+            UserDBHelper.deleteByName("张飞", object : OnDBCompleteListener {
+                override fun onResult(results: List<Any>?) {
+
+                }
+
+                override fun onSuccess() {
+                    Log.i(TAG, "delete success")
+                }
+
+                override fun onError(throwable: Throwable) {
+                    Log.e(TAG, "delete error", throwable)
+                }
+
+            })
         }
         btn_update.setOnClickListener {
+            val realm = RealmHelper.getRealm()
             realm.executeTransaction {
                 val user = it.where(User::class.java)
                         .equalTo("name", "张飞")
@@ -79,6 +83,7 @@ class MainActivity : AppCompatActivity() {
             realm.close()
         }
         btn_query.setOnClickListener {
+            val realm = RealmHelper.getRealm()
             realm
                     .where(User::class.java)
 //                    .equalTo("name", "赵云")
